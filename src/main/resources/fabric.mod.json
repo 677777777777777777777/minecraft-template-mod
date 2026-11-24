@@ -1,44 +1,19 @@
 {
-	"schemaVersion": 1,
-	"id": "templatemod",
-	"version": "${version}",
-	"name": "Template Mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Me!"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/templatemod/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"rul.templatemod.TemplateMod"
-		],
-		"client": [
-			"rul.templatemod.TemplateModClient"
-		],
-		"fabric-datagen": [
-			"rul.templatemod.TemplateModDataGenerator"
-		]
-	},
-	"mixins": [
-		"templatemod.mixins.json",
-		{
-			"config": "templatemod.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.17.2",
-		"minecraft": "~1.21.4",
-		"java": ">=21",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "benchdig",
+  "version": "1.0.0",
+  "name": "Bench Dig",
+  "description": "Kopie obszar z opoznieniem.",
+  "authors": ["killywilly"],
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.bench.dig.BenchDigClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "1.21.4",
+    "java": ">=21"
+  }
 }
