@@ -14,27 +14,31 @@ import java.util.List;
 public class BenchDigClient implements ClientModInitializer {
     private static final List<BlockPos> blocksToDig = new ArrayList<>();
     private static int tickDelay = 0;
-    private static final int DELAY_TICKS = 4; // 4 ticki = 200ms (bezpieczne tempo)
+    private static final int DELAY_TICKS = 4; 
     private static BlockPos currentTarget = null;
 
     @Override
     public void onInitializeClient() {
-        // Komenda: /kop <x1> <z1> <x2> <z2>
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(ClientCommandManager.literal("kop")
-                .then(ClientCommandManager.argument("x1", com.mojang.brigadier.arguments.IntegerArgumentType.integer())
-                .then(ClientCommandManager.argument("z1", com.mojang.brigadier.arguments.IntegerArgumentType.integer())
-                .then(ClientCommandManager.argument("x2", com.mojang.brigadier.arguments.IntegerArgumentType.integer())
-                .then(ClientCommandManager.argument("z2", com.mojang.brigadier.arguments.IntegerArgumentType.integer())
                 .executes(context -> {
-                    int x1 = com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "x1");
-                    int z1 = com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "z1");
-                    int x2 = com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "x2");
-                    int z2 = com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(context, "z2");
-                    
-                    startDigging(x1, z1, x2, z2);
+                    String[] args = context.getInput().split(" ");
+                    if (args.length == 5) {
+                        try {
+                            int x1 = Integer.parseInt(args[1]);
+                            int z1 = Integer.parseInt(args[2]);
+                            int x2 = Integer.parseInt(args[3]);
+                            int z2 = Integer.parseInt(args[4]);
+                            startDigging(x1, z1, x2, z2);
+                        } catch (NumberFormatException e) {
+                            context.getSource().sendError(net.minecraft.text.Text.literal("Zle kordy."));
+                        }
+                    } else {
+                        context.getSource().sendError(net.minecraft.text.Text.literal("Uzyj: /kop x1 z1 x2 z2"));
+                    }
                     return 1;
-                })))));
+                })
+            );
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -71,7 +75,6 @@ public class BenchDigClient implements ClientModInitializer {
         int minZ = Math.min(z1, z2), maxZ = Math.max(z1, z2);
         int startY = (int) client.player.getY();
 
-        // Kopie 5 kratek w gore od poziomu stop
         for (int y = startY + 4; y >= startY; y--) {
             for (int x = minX; x <= maxX; x++) {
                 for (int z = minZ; z <= maxZ; z++) {
