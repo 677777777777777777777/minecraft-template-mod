@@ -13,7 +13,7 @@ jobs:
       - name: Generate Gradle Wrapper
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: '8.10'
+          gradle-version: '8.14'
           arguments: wrapper
       - name: Build with Gradle
         run: ./gradlew build
